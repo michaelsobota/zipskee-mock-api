@@ -1,0 +1,644 @@
+# Zipskee API 1.0
+swagger: '2.0'
+info:
+  title: Zipskee API v1.0
+  description: Zipskee Public API | All Methods not defined should 405
+  version: "2.0"
+# the domain of the service
+host: localhost:8000
+# array of all schemes that your API supports
+schemes:
+  - http
+# will be prefixed to all paths
+basePath: /api/v1
+produces:
+  - application/json
+paths:
+  /users:
+    get:
+      summary: Retruns a full list of users - this can contain a short list of properties. It does not have to return the full schema
+      parameters:
+       - name: X-ZIPSKEE-SESSION
+         in: header
+         description: A session token for access control
+         required: false
+         type: string
+      tags:
+        - Users
+      responses:
+        200:
+          description: ok
+          schema:
+            $ref: '#/definitions/Users'
+        401:
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        500:
+          description: internal server error
+          schema:
+            $ref: '#/definitions/Errors'
+    post:
+      summary: Creates a new user account
+      parameters:
+       - name: X-ZIPSKEE-SESSION
+         in: header
+         description: A session token for access control
+         required: false
+         type: string
+       - name: createUserBody
+         in: body
+         description: user's first name
+         required: true
+         schema:
+           type: object
+           properties:
+             firstName:
+               type: string
+             lastName:
+               type: string
+             email:
+               type: string
+             password:
+               type: string
+      tags:
+        - Users
+      responses:
+        201:
+          description: created
+        400:
+          description: bad request
+          schema:
+            $ref: '#/definitions/Errors'
+  /users/{userId}:
+    get:
+      summary: Returns a particular user's details
+      parameters:
+        - name: userId
+          in: path
+          description: the id of the logged-in user
+          required: true
+          type: integer
+      tags:
+        - Users
+      responses:
+        200:
+          description: ok
+          schema:
+            $ref: '#/definitions/Users'
+        401:
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        500:
+          description: internal server error
+          schema:
+            $ref: '#/definitions/Errors'
+  /users/{userId}/photos:
+    get:
+      summary: Returns a list of all photos for a user
+      parameters:
+       - name: userId
+         in: path
+         description: the id of the logged-in user
+         required: true
+         type: integer
+       - name: X-ZIPSKEE-SESSION
+         in: header
+         description: A session token for access control
+         required: false
+         type: string
+      tags:
+       - Users
+       - Photos
+      responses:
+        200:
+          description: ok
+          schema:
+            $ref: '#/definitions/Photos'
+        500:
+          description: internal server error
+          schema:
+            $ref: "#/definitions/Errors"
+        401:
+          description: unauthorized
+          schema:
+            $ref: "#/definitions/Errors"
+    post:
+      summary: Associates a new picture with a user
+      parameters:
+       - name: userId
+         in: path
+         description: the id of the logged-in user
+         required: true
+         type: integer
+       - name: X-ZIPSKEE-SESSION
+         in: header
+         description: A session token for access control
+         required: false
+         type: string
+       - name: photoUpload
+         in: body
+         description: the photo metadata of the uploaded photo
+         required: true
+         schema:
+           type: object
+           properties:
+             photoUri:
+               type: string
+               description: the uri returned after uploading to S3
+             isProfileImage:
+               type: boolean
+               description: if this is to be the profile photo or not
+             caption:
+               type: string
+               description: the photo's caption
+      tags:
+        - Users
+        - Photos
+      responses:
+        201:
+          description: created
+        400:
+          description: bad request
+          schema:
+            $ref: '#/definitions/Errors'
+  /users/{userId}/photos/{photoId}:
+    get:
+      summary: Returns a specific photo for a user
+      parameters:
+       - name: userId
+         in: path
+         description: the id of the logged-in user
+         required: true
+         type: integer
+       - name: photoId
+         in: path
+         description: the id of the photo to return, id 0 should return the default photo
+         type: integer
+         required: true
+       - name: X-ZIPSKEE-SESSION
+         in: header
+         description: A session token for access control
+         required: false
+         type: string
+      tags:
+       - Users
+       - Photos
+      responses:
+        200:
+          description: ok
+          schema:
+            $ref: '#/definitions/Photos'
+        500:
+          description: internal server error
+          schema:
+            $ref: "#/definitions/Errors"
+        401:
+          description: unauthorized
+          schema:
+            $ref: "#/definitions/Errors"
+    put:
+      summary: Updates an existing photo for a user
+      parameters:
+       - name: photoUpload
+         in: body
+         description: the photo metadata of the uploaded photo
+         required: true
+         schema:
+           type: object
+           properties:
+             photoUri:
+               type: string
+               description: the uri returned after uploading to S3
+             isProfileImage:
+               type: boolean
+               description: if this is to be the profile photo or not
+             caption:
+               type: string
+               description: the photo's caption
+       - name: userId
+         in: path
+         description: the id of the logged-in user
+         required: true
+         type: integer
+       - name: photoId
+         in: path
+         description: the id of the photo to replace
+         type: integer
+         required: true
+       - name: X-ZIPSKEE-SESSION
+         in: header
+         description: A session token for access control
+         required: false
+         type: string
+      tags:
+       - Users
+       - Photos
+      responses:
+        200:
+          description: ok
+          schema:
+            $ref: '#/definitions/Success'
+        500:
+          description: internal server error
+          schema:
+            $ref: "#/definitions/Errors"
+        400:
+          description: bad request
+          schema:
+            $ref: "#/definitions/Errors"
+        401:
+          description: unauthorized
+          schema:
+            $ref: "#/definitions/Errors"
+    delete:
+      summary: Deletes an existing photo for a user
+      parameters:
+       - name: userId
+         in: path
+         description: the id of the logged-in user
+         required: true
+         type: integer
+       - name: photoId
+         in: path
+         description: the id of the photo to delete
+         type: integer
+         required: true
+       - name: X-ZIPSKEE-SESSION
+         in: header
+         description: A session token for access control
+         required: false
+         type: string
+      tags:
+       - Users
+       - Photos
+      responses:
+        200:
+          description: ok
+          schema:
+            $ref: '#/definitions/Success'
+        500:
+          description: internal server error
+          schema:
+            $ref: "#/definitions/Errors"
+        401:
+          description: unauthorized
+          schema:
+            $ref: "#/definitions/Errors"
+  /users/{userId}/contacts:
+    get:
+      summary: Returns an array of users you've connected with
+      parameters:
+       - name: userId
+         in: path
+         description: the id of the logged-in user
+         required: true
+         type: string
+       - name: X-TRIP-SESSION
+         in: header
+         description: valid session token
+         required: true
+         type: string
+      tags:
+       - Users
+       - Contacts
+      responses:
+        200:
+          description: ok
+          schema:
+            $ref: '#/definitions/Contacts'
+        500:
+          description: internal server error
+          schema:
+            $ref: "#/definitions/Errors"
+        401:
+          description: unauthorized
+          schema:
+            $ref: "#/definitions/Errors"
+  /users/{userId}/referrals:
+    get:
+      summary: Returns an array of referrals
+      parameters:
+       - name: userId
+         in: path
+         description: the id of the logged-in user
+         required: true
+         type: string
+       - name: X-TRIP-SESSION
+         in: header
+         description: valid session token
+         required: true
+         type: string
+      tags:
+       - Users
+       - Referrals
+      responses:
+        200:
+          description: ok
+          schema:
+            $ref: '#/definitions/Referrals'
+        500:
+          description: internal server error
+          schema:
+            $ref: "#/definitions/Errors"
+        401:
+          description: unauthorized
+          schema:
+            $ref: "#/definitions/Errors"
+  /users/{userId}/referrals/{referralId}:
+    get:
+      summary: Returns a specific referral
+      parameters:
+       - name: referralId
+         in: path
+         description: the id of the referral to pull back
+         required: true
+         type: integer
+       - name: userId
+         in: path
+         description: the id of the logged-in user
+         required: true
+         type: string
+       - name: X-TRIP-SESSION
+         in: header
+         description: valid session token
+         required: true
+         type: string
+      tags:
+       - Users
+       - Referrals
+      responses:
+        200:
+          description: ok
+          schema:
+            $ref: '#/definitions/Referrals'
+        500:
+          description: internal server error
+          schema:
+            $ref: "#/definitions/Errors"
+        401:
+          description: unauthorized
+          schema:
+            $ref: "#/definitions/Errors"
+    delete:
+      summary: Deletes a specific referral
+      parameters:
+       - name: referralId
+         in: path
+         description: the id of the referral to pull back
+         required: true
+         type: integer
+       - name: userId
+         in: path
+         description: the id of the logged-in user
+         required: true
+         type: string
+       - name: X-TRIP-SESSION
+         in: header
+         description: valid session token
+         required: true
+         type: string
+      tags:
+       - Users
+       - Referrals
+      responses:
+        200:
+          description: ok
+        500:
+          description: internal server error
+          schema:
+            $ref: '#/definitions/Errors'
+    put:
+      summary: Updates a specific referral
+      parameters:
+       - name: referralId
+         in: path
+         description: the id of the referral to pull back
+         required: true
+         type: integer
+       - name: userId
+         in: path
+         description: the id of the logged-in user
+         required: true
+         type: string
+       - name: X-TRIP-SESSION
+         in: header
+         description: valid session token
+         required: true
+         type: string
+       - name: referralBody
+         in: body
+         description: the referral object being created
+         required: true
+         schema:
+           type: object
+           properties:
+             userId:
+               type: integer
+             referredUser:
+               type: integer
+             thumbsUp:
+               type: boolean
+             referralText:
+               type: string
+      tags:
+       - Users
+       - Referrals
+      responses:
+        200:
+          description: ok
+        400:
+          description: bad request
+          schema:
+            $ref: '#/definitions/Errors'
+        500:
+          description: internal server error
+          schema:
+            $ref: '#/definitions/Errors'
+  /users/{userId}/favorites:
+    get:
+      summary: Returns an array of favorites
+      parameters:
+       - name: userId
+         in: path
+         description: the id of the logged-in user
+         required: true
+         type: string
+       - name: X-TRIP-SESSION
+         in: header
+         description: valid session token
+         required: true
+         type: string
+      tags:
+       - Users
+       - Favorites
+      responses:
+        200:
+          description: ok
+          schema:
+            $ref: '#/definitions/Favorites'
+        500:
+          description: internal server error
+          schema:
+            $ref: "#/definitions/Errors"
+        401:
+          description: unauthorized
+          schema:
+            $ref: "#/definitions/Errors"
+  /users/{userId}/favorites/{favoriteUserId}:
+    post:
+      summary: Creates a favorite
+      parameters:
+       - name: favoriteUserId
+         in: path
+         description: the id of favorited user
+         required: true
+         type: integer
+       - name: userId
+         in: path
+         description: the id of the logged-in user
+         required: true
+         type: string
+       - name: X-TRIP-SESSION
+         in: header
+         description: valid session token
+         required: true
+         type: string
+      tags:
+       - Users
+       - Favorites
+      responses:
+        201:
+          description: created
+        400:
+          description: bad request
+          schema:
+            $ref: '#/definitions/Errors'
+        500:
+          description: internal server error
+          schema:
+            $ref: '#/definitions/Errors'
+    delete:
+      summary: Deletes a favorite
+      parameters:
+       - name: favoriteUserId
+         in: path
+         description: the id of the user to remove from favorites
+         required: true
+         type: integer
+       - name: userId
+         in: path
+         description: the id of the logged-in user
+         required: true
+         type: string
+       - name: X-TRIP-SESSION
+         in: header
+         description: valid session token
+         required: true
+         type: string
+      tags:
+       - Users
+       - Favorites
+      responses:
+        200:
+          description: ok
+        500:
+          description: internal server error
+          schema:
+            $ref: '#/definitions/Errors'
+definitions:
+  Favorites:
+    type: array
+    items:
+      type: object
+      properties:
+        favoriteId:
+          type: integer
+        favoritedUserId:
+          type: integer
+          description: the id of the other user
+        favoritedUserName:
+          type: string
+  Contacts:
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          type: integer
+        firstName:
+          type: string
+        lastName:
+          type: string
+        imageUri:
+          type: string
+  Referrals:
+    type: array
+    items:
+      type: object
+      properties:
+        referredUserName:
+          type: string
+        referredUserImageUri:
+          type: string
+        isThumbsedUp:
+          type: boolean
+        referralText:
+          type: string
+  Users:
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          type: integer
+        firstName:
+          type: string
+        lastName:
+          type: string
+        gender:
+          type: string
+        hometown:
+          type: string
+        currentCity:
+          type: string
+        is_traveling:
+          type: boolean
+        dob:
+          type: integer
+          description: epoch time dob
+        occupation:
+          type: string
+        about_me:
+          type: string
+        role:
+          type: string
+  Photos:
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          type: integer
+        isProfileImage:
+          type: boolean
+        imageUri:
+          type: string
+  Success:
+    type: object
+    properties:
+      code:
+        type: integer
+      description:
+        type: string
+        description: a short success message
+  Errors:
+    type: object
+    properties:
+      code:
+        type: integer
+        description: internal server error code
+      description:
+        type: string
+        description: short error description
