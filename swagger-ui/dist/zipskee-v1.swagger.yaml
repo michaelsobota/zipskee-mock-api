@@ -5,10 +5,10 @@ info:
   description: Zipskee Public API | All Methods not defined should 405
   version: "2.0"
 # the domain of the service
-host: localhost:8000
+host: zipskee-test.apigee.net
 # array of all schemes that your API supports
 schemes:
-  - http
+  - https
 # will be prefixed to all paths
 basePath: /api/v1
 produces:
@@ -61,8 +61,6 @@ paths:
                type: string
              password:
                type: string
-      tags:
-        - Users
       responses:
         201:
           description: created
@@ -74,6 +72,11 @@ paths:
     get:
       summary: Returns a particular user's details
       parameters:
+        - name: X-ZIPSKEE-SESSION
+          in: header
+          description: A session token for access control
+          required: false
+          type: string
         - name: userId
           in: path
           description: the id of the logged-in user
@@ -94,6 +97,90 @@ paths:
           description: internal server error
           schema:
             $ref: '#/definitions/Errors'
+    put:
+      summary: Updates a particular user's details
+      parameters:
+       - name: X-ZIPSKEE-SESSION
+         in: header
+         description: A session token for access control
+         required: false
+         type: string
+       - name: userId
+         in: path
+         description: the id of the logged-in user
+         required: true
+         type: integer
+       - name: updateBody
+         in: body
+         description: the properties of a user you are updating
+         required: true
+         schema:
+           type: object
+           properties:
+             firstName:
+               type: string
+             lastName:
+               type: string
+             genderId:
+               type: integer
+             hometownCityId:
+               type: integer
+             currentCityId:
+               type: integer
+             isTraveling:
+               type: boolean
+             dob:
+               type: integer
+               description: epoch time dob
+             occupation:
+               type: string
+             aboutMe:
+               type: string
+             role:
+               type: string
+      tags:
+       - Users
+      responses:
+        200:
+          description: ok
+          schema:
+            $ref: '#/definitions/Success'
+        401:
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        400:
+          description: bad request
+          schema:
+            $ref: '#/definitions/Errors'
+    delete:
+      summary: Removes a user account
+      parameters:
+       - name: X-ZIPSKEE-SESSION
+         in: header
+         description: A session token for access control
+         required: false
+         type: string
+       - name: userId
+         in: path
+         description: the id of the logged-in user
+         required: true
+         type: integer
+      tags:
+       - Users
+      responses:
+        200:
+          description: ok
+          schema:
+            $ref: '#/definitions/Success'
+        401:
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Success'
+        400:
+          description: bad request
+          schema:
+            $ref: '#/definitions/Success'
   /users/{userId}/photos:
     get:
       summary: Returns a list of all photos for a user
@@ -153,9 +240,6 @@ paths:
              caption:
                type: string
                description: the photo's caption
-      tags:
-        - Users
-        - Photos
       responses:
         201:
           description: created
