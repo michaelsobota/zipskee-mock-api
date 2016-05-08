@@ -3,7 +3,7 @@ swagger: '2.0'
 info:
   title: Zipskee API v1.0
   description: Zipskee Public API | All Methods not defined should 405 | Accept, Content-Type, and Content-Length headers are assumed and not explicitly called out
-  version: "2.0"
+  version: "1.0"
 # the domain of the service
 host: localhost:8000
 # array of all schemes that your API supports
@@ -684,6 +684,27 @@ paths:
           schema:
             $ref: '#/definitions/Errors'
   /messages/{messageId}:
+    get:
+      summary: gets a spceific message
+      parameters:
+        - name: messageId
+          in: path
+          description: the id of the message
+          required: true
+          type: integer
+      tags:
+        - Messages
+      responses:
+        200:
+          description: ok
+        401:
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        500:
+          description: internal server error
+          schema:
+            $ref: '#/definitions/Errors'
     put:
       summary: updates a specific message
       parameters:
@@ -718,6 +739,10 @@ paths:
           description: ok
           schema:
             $ref: '#/definitions/Success'
+        400:
+          description: bad request
+          schema:
+            $ref: '#/definitions/Errors'
         401:
           description: unauthorized
           schema:
@@ -746,6 +771,10 @@ paths:
           description: ok
           schema:
             $ref: '#/definitions/Success'
+        400:
+          description: bad request
+          schema:
+            $ref: '#/definitions/Errors'
         401:
           description: unauthorized
           schema:
@@ -786,6 +815,10 @@ paths:
           description: ok
           schema:
             $ref: '#/definitions/Success'
+        400:
+          description: bad request
+          schema:
+            $ref: '#/definitions/Errors'
         401:
           description: unauthorized
           schema:
