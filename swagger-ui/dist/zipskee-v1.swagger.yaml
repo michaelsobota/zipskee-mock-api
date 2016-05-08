@@ -754,6 +754,46 @@ paths:
           description: internal server error
           schema:
             $ref: '#/definitions/Errors'
+  /messages/user/{userId}:
+    post:
+      summary: sends a message to a user
+      parameters:
+       - name: userId
+         in: path
+         description: id of the user to send a message to
+         required: true
+         type: integer
+       - name: messageBody
+         in: body
+         description: status to update the message to
+         required: true
+         schema:
+           type: object
+           required:
+            - messageText
+           properties:
+             messageText:
+               type: string
+       - name: X-ZIPSKEE-SESSION
+         in: header
+         description: valid session token
+         required: true
+         type: string
+      tags:
+       - Messages
+      responses:
+        200:
+          description: ok
+          schema:
+            $ref: '#/definitions/Success'
+        401:
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        500:
+          description: internal server error
+          schema:
+            $ref: '#/definitions/Errors'
 definitions:
   Messages:
     type: object
