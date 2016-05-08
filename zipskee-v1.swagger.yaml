@@ -692,6 +692,11 @@ paths:
           description: the id of the message
           required: true
           type: integer
+        - name: X-ZIPSKEE-SESSION
+          in: header
+          description: valid session token
+          required: true
+          type: string
       tags:
         - Messages
       responses:
