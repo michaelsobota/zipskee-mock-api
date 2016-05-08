@@ -14,6 +14,35 @@ basePath: /api/v1
 produces:
   - application/json
 paths:
+  /login:
+    post:
+      summary: Get a session token for zipskee
+      parameters:
+       - name: username
+         in: formData
+         description: username of person logging in
+         required: true
+         type: string
+       - name: password
+         in: formData
+         description: password of person logging in
+         required: true
+         type: string
+      tags:
+       - Login
+      responses:
+        200:
+          description: ok
+          schema:
+            $ref: '#/definitions/Login'
+        401:
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        500:
+          description: internal server error
+          schema:
+            $ref: '#/definitions/Errors'
   /users:
     get:
       summary: Retruns a full list of users
@@ -835,6 +864,27 @@ paths:
           schema:
             $ref: '#/definitions/Errors'
 definitions:
+  Login:
+    type: object
+    required:
+     - authToken
+     - links
+    properties:
+      authToken:
+        type: string
+      links:
+        type: object
+        required:
+         - rel
+         - href
+        properties:
+          rel:
+            type: string
+            enum:
+             - self
+          href:
+            type: string
+            description: e.g., "/api/v1/users/idOfUser"
   Messages:
     type: object
     required:
