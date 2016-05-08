@@ -47,9 +47,9 @@ paths:
     post:
       summary: Expire a session token for zipskee
       parameters:
-       - name: sessionToken
-         in: formData
-         description: session token of person logged in
+       - name: X-ZIPSKEE-SESSION
+         in: header
+         description: A session token for access control
          required: true
          type: string
       tags:
@@ -69,9 +69,9 @@ paths:
     post:
       summary: Authenticate a session token for zipskee
       parameters:
-       - name: sessionToken
-         in: formData
-         description: session token of person logged in
+       - name: X-ZIPSKEE-SESSION
+         in: header
+         description: A session token for access control
          required: true
          type: string
       tags:
