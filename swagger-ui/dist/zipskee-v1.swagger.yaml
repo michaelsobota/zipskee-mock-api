@@ -882,6 +882,7 @@ definitions:
                - id
                - fullName
                - photoUri
+               - links
               properties:
                 id:
                   type: integer
@@ -892,6 +893,19 @@ definitions:
                 photoUri:
                   type: string
                   description: the uri of the default image of the sending user
+                links:
+                  type: object
+                  required:
+                   - rel
+                   - href
+                  properties:
+                    rel:
+                      type: string
+                      enum:
+                       - self
+                    href:
+                      type: string
+                      description: e.g., "/api/v1/users/idOfUser"
             messageText:
               type: string
               description: the message
