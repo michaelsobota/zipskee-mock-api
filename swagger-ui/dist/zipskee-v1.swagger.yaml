@@ -16,7 +16,7 @@ produces:
 paths:
   /users:
     get:
-      summary: Retruns a full list of users - this can contain a short list of properties. It does not have to return the full schema
+      summary: Retruns a full list of users
       parameters:
        - name: X-ZIPSKEE-SESSION
          in: header
@@ -678,12 +678,89 @@ paths:
           description: internal server error
           schema:
             $ref: '#/definitions/Errors'
+  /messages/{messageId}:
+    put:
+      summary: updates a specific message
+      parameters:
+       - name: messageId
+         in: path
+         description: id of the message to be updated
+         required: true
+         type: integer
+       - name: updateBody
+         in: body
+         description: status to update the message to
+         required: true
+         schema:
+           type: object
+           required:
+            - readStatus
+           properties:
+             readStatus:
+               type: string
+               enum:
+                - read
+                - unread
+       - name: X-TRIP-SESSION
+         in: header
+         description: valid session token
+         required: true
+         type: string
+      tags:
+       - Messages
+      responses:
+        200:
+          description: ok
+          schema:
+            $ref: '#/definitions/Success'
+        401:
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        500:
+          description: internal server error
+          schema:
+            $ref: '#/definitions/Errors'
+    delete:
+      summary: deletes (archives in db) a specific message
+      parameters:
+       - name: messageId
+         in: path
+         description: id of the message to be updated
+         required: true
+         type: integer
+       - name: X-TRIP-SESSION
+         in: header
+         description: valid session token
+         required: true
+         type: string
+      tags:
+       - Messages
+      responses:
+        200:
+          description: ok
+          schema:
+            $ref: '#/definitions/Success'
+        401:
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        500:
+          description: internal server error
+          schema:
+            $ref: '#/definitions/Errors'
 definitions:
   Messages:
     type: object
+    required:
+     - page
+     - messages
     properties:
       page:
         type: object
+        required:
+         - rel
+         - href
         properties:
           rel:
             type: string
@@ -700,24 +777,36 @@ definitions:
         type: array
         items:
           type: object
+          required:
+           - id
+           - readStatus
+           - fromUser
+           - messageText
           properties:
             id:
               type: integer
             readStatus:
               type: string
-              description: read or unread
+              description: status of message
               enum:
-               - "read"
-               - "unread"
-            fromUserId:
-              type: integer
-              description: the user id of who sent the message
-            fromUserName:
-              type: string
-              description: the full name of the user who sent the message
-            fromUserPhotoUri:
-              type: string
-              description: the uri of the default image of the sending user
+               - read
+               - unread
+            fromUser:
+              type: object
+              required:
+               - id
+               - fullName
+               - photoUri
+              properties:
+                id:
+                  type: integer
+                  description: the user id of who sent the message
+                fullName:
+                  type: string
+                  description: the full name of the user who sent the message
+                photoUri:
+                  type: string
+                  description: the uri of the default image of the sending user
             messageText:
               type: string
               description: the message
@@ -725,18 +814,50 @@ definitions:
     type: array
     items:
       type: object
+      required:
+       - id
+       - favorite
       properties:
-        favoriteId:
+        id:
           type: integer
-        favoritedUserId:
-          type: integer
-          description: the id of the other user
-        favoritedUserName:
-          type: string
+        favorite:
+          type: object
+          required:
+           - id
+           - fullName
+           - photoUri
+           - links
+          properties:
+            id:
+              type: integer
+              description: the id of the other user
+            fullName:
+              type: string
+            photoUri:
+              type: string
+            links:
+              type: object
+              required:
+               - rel
+               - href
+              properties:
+                rel:
+                  type: string
+                  enum:
+                   - self
+                href:
+                  type: string
+                  description: e.g., "/api/v1/users/idOfFavorite"
   Contacts:
     type: array
     items:
       type: object
+      required:
+       - id
+       - firstName
+       - lastName
+       - imageUri
+       - links
       properties:
         id:
           type: integer
@@ -746,15 +867,58 @@ definitions:
           type: string
         imageUri:
           type: string
+        links:
+          type: object
+          required:
+           - rel
+           - href
+          properties:
+            rel:
+              type: string
+              enum:
+               - self
+            href:
+              type: string
+              description: e.g., "/api/v1/users/idOfContact"
   Referrals:
     type: array
     items:
       type: object
+      required:
+       - id
+       - referrer
+       - isThumbsedUp
+       - referralText
       properties:
-        referredUserName:
-          type: string
-        referredUserImageUri:
-          type: string
+        id:
+          type: integer
+        referrer:
+          type: object
+          required:
+           - id
+           - fullName
+           - imageUri
+           - links
+          properties:
+            id:
+              type: integer
+            fullName:
+              type: string
+            imageUri:
+              type: string
+            links:
+              type: object
+              required:
+               - rel
+               - href
+              properties:
+                rel:
+                  type: string
+                  enum:
+                   - self
+                href:
+                  type: string
+                  description: e.g., "/api/v1/users/idOfReferrer"
         isThumbsedUp:
           type: boolean
         referralText:
@@ -763,6 +927,8 @@ definitions:
     type: array
     items:
       type: object
+      required:
+       - id
       properties:
         id:
           type: integer
@@ -787,10 +953,28 @@ definitions:
           type: string
         role:
           type: string
+        links:
+          type: object
+          required:
+           - rel
+           - href
+          properties:
+            rel:
+              type: string
+              enum:
+               - self
+            href:
+              type: string
+              description: e.g., "/api/v1/users/idOfUser"
   Photos:
     type: array
     items:
       type: object
+      required:
+       - id
+       - isProfileImage
+       - imageUri
+       - links
       properties:
         id:
           type: integer
@@ -798,16 +982,35 @@ definitions:
           type: boolean
         imageUri:
           type: string
+        links:
+          type: object
+          required:
+           - rel
+           - href
+          properties:
+            rel:
+              type: string
+              enum:
+               - self
+            href:
+              type: string
+              description: e.g., "/api/v1/users/idOfUser"
   Success:
     type: object
+    required:
+     - code
+     - description
     properties:
       code:
         type: integer
       description:
         type: string
-        description: a short success message
+        description: short success message
   Errors:
     type: object
+    required:
+     - code
+     - description
     properties:
       code:
         type: integer
