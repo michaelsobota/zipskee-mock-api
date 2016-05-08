@@ -5,7 +5,7 @@ info:
   description: Zipskee Public API | All Methods not defined should 405 | Accept, Content-Type, and Content-Length headers are assumed and not explicitly called out
   version: "2.0"
 # the domain of the service
-host: localhost:8080
+host: localhost:8000
 # array of all schemes that your API supports
 schemes:
   - http
