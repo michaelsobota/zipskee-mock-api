@@ -21,7 +21,7 @@ paths:
        - name: X-ZIPSKEE-SESSION
          in: header
          description: A session token for access control
-         required: false
+         required: true
          type: string
       tags:
         - Users
@@ -44,7 +44,7 @@ paths:
        - name: X-ZIPSKEE-SESSION
          in: header
          description: A session token for access control
-         required: false
+         required: true
          type: string
        - name: createUserBody
          in: body
@@ -77,7 +77,7 @@ paths:
         - name: X-ZIPSKEE-SESSION
           in: header
           description: A session token for access control
-          required: false
+          required: true
           type: string
         - name: userId
           in: path
@@ -105,7 +105,7 @@ paths:
        - name: X-ZIPSKEE-SESSION
          in: header
          description: A session token for access control
-         required: false
+         required: true
          type: string
        - name: userId
          in: path
@@ -161,7 +161,7 @@ paths:
        - name: X-ZIPSKEE-SESSION
          in: header
          description: A session token for access control
-         required: false
+         required: true
          type: string
        - name: userId
          in: path
@@ -195,7 +195,7 @@ paths:
        - name: X-ZIPSKEE-SESSION
          in: header
          description: A session token for access control
-         required: false
+         required: true
          type: string
       tags:
        - Users
@@ -224,7 +224,7 @@ paths:
        - name: X-ZIPSKEE-SESSION
          in: header
          description: A session token for access control
-         required: false
+         required: true
          type: string
        - name: photoUpload
          in: body
@@ -269,7 +269,7 @@ paths:
        - name: X-ZIPSKEE-SESSION
          in: header
          description: A session token for access control
-         required: false
+         required: true
          type: string
       tags:
        - Users
@@ -319,7 +319,7 @@ paths:
        - name: X-ZIPSKEE-SESSION
          in: header
          description: A session token for access control
-         required: false
+         required: true
          type: string
       tags:
        - Users
@@ -357,7 +357,7 @@ paths:
        - name: X-ZIPSKEE-SESSION
          in: header
          description: A session token for access control
-         required: false
+         required: true
          type: string
       tags:
        - Users
@@ -384,7 +384,7 @@ paths:
          description: the id of the logged-in user
          required: true
          type: string
-       - name: X-TRIP-SESSION
+       - name: X-ZIPSKEE-SESSION
          in: header
          description: valid session token
          required: true
@@ -414,7 +414,7 @@ paths:
          description: the id of the logged-in user
          required: true
          type: string
-       - name: X-TRIP-SESSION
+       - name: X-ZIPSKEE-SESSION
          in: header
          description: valid session token
          required: true
@@ -449,7 +449,7 @@ paths:
          description: the id of the logged-in user
          required: true
          type: string
-       - name: X-TRIP-SESSION
+       - name: X-ZIPSKEE-SESSION
          in: header
          description: valid session token
          required: true
@@ -483,7 +483,7 @@ paths:
          description: the id of the logged-in user
          required: true
          type: string
-       - name: X-TRIP-SESSION
+       - name: X-ZIPSKEE-SESSION
          in: header
          description: valid session token
          required: true
@@ -511,7 +511,7 @@ paths:
          description: the id of the logged-in user
          required: true
          type: string
-       - name: X-TRIP-SESSION
+       - name: X-ZIPSKEE-SESSION
          in: header
          description: valid session token
          required: true
@@ -554,7 +554,7 @@ paths:
          description: the id of the logged-in user
          required: true
          type: string
-       - name: X-TRIP-SESSION
+       - name: X-ZIPSKEE-SESSION
          in: header
          description: valid session token
          required: true
@@ -589,7 +589,7 @@ paths:
          description: the id of the logged-in user
          required: true
          type: string
-       - name: X-TRIP-SESSION
+       - name: X-ZIPSKEE-SESSION
          in: header
          description: valid session token
          required: true
@@ -625,7 +625,7 @@ paths:
          description: the id of the logged-in user
          required: true
          type: string
-       - name: X-TRIP-SESSION
+       - name: X-ZIPSKEE-SESSION
          in: header
          description: valid session token
          required: true
@@ -649,7 +649,7 @@ paths:
       summary: retrieves inbox messages for a given user (based on token passed in)
       description: list of messages is returned in descending order based on date (newest first)
       parameters:
-       - name: X-TRIP-SESSION
+       - name: X-ZIPSKEE-SESSION
          in: header
          description: valid session token
          required: true
@@ -706,7 +706,7 @@ paths:
                enum:
                 - read
                 - unread
-       - name: X-TRIP-SESSION
+       - name: X-ZIPSKEE-SESSION
          in: header
          description: valid session token
          required: true
@@ -734,7 +734,7 @@ paths:
          description: id of the message to be updated
          required: true
          type: integer
-       - name: X-TRIP-SESSION
+       - name: X-ZIPSKEE-SESSION
          in: header
          description: valid session token
          required: true
