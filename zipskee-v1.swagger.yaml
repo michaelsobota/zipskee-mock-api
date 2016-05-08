@@ -79,6 +79,8 @@ paths:
       responses:
         200:
           description: ok
+          schema:
+            $ref: '#/definitions/Users'
         401:
           description: unauthorized
           schema:
