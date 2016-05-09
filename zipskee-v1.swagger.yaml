@@ -80,7 +80,7 @@ paths:
         200:
           description: ok
           schema:
-            $ref: '#/definitions/Users'
+            $ref: '#/definitions/User'
         401:
           description: unauthorized
           schema:
@@ -1118,49 +1118,56 @@ definitions:
           type: boolean
         referralText:
           type: string
+  User:
+    type: object
+    required:
+      - id
+      - userName
+      - firstName
+      - lastName
+    properties:
+      id:
+        type: integer
+      userName:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+      gender:
+        type: string
+      hometown:
+        type: string
+      currentCity:
+        type: string
+      is_traveling:
+        type: boolean
+      dob:
+        type: integer
+        description: epoch time dob
+      occupation:
+        type: string
+      about_me:
+        type: string
+      role:
+        type: string
+      links:
+        type: object
+        required:
+         - rel
+         - href
+        properties:
+          rel:
+            type: string
+            enum:
+             - self
+          href:
+            type: string
+            description: e.g., "/api/v1/users/idOfUser"
   Users:
     type: array
     items:
-      type: object
-      required:
-       - id
-      properties:
-        id:
-          type: integer
-        firstName:
-          type: string
-        lastName:
-          type: string
-        gender:
-          type: string
-        hometown:
-          type: string
-        currentCity:
-          type: string
-        is_traveling:
-          type: boolean
-        dob:
-          type: integer
-          description: epoch time dob
-        occupation:
-          type: string
-        about_me:
-          type: string
-        role:
-          type: string
-        links:
-          type: object
-          required:
-           - rel
-           - href
-          properties:
-            rel:
-              type: string
-              enum:
-               - self
-            href:
-              type: string
-              description: e.g., "/api/v1/users/idOfUser"
+      $ref: '#/definitions/User'
   Photos:
     type: array
     items:
