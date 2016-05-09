@@ -29,12 +29,58 @@ paths:
          required: true
          type: string
       tags:
-       - Login
+       - Auth
       responses:
         200:
           description: ok
           schema:
             $ref: '#/definitions/Login'
+        401:
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        500:
+          description: internal server error
+          schema:
+            $ref: '#/definitions/Errors'
+  /logout:
+    post:
+      summary: Expire a session token for zipskee
+      parameters:
+       - name: X-ZIPSKEE-SESSION
+         in: header
+         description: A session token for access control
+         required: true
+         type: string
+      tags:
+       - Auth
+      responses:
+        200:
+          description: ok
+        401:
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        500:
+          description: internal server error
+          schema:
+            $ref: '#/definitions/Errors'
+  /login/session-info:
+    post:
+      summary: Authenticate a session token for zipskee
+      parameters:
+       - name: X-ZIPSKEE-SESSION
+         in: header
+         description: A session token for access control
+         required: true
+         type: string
+      tags:
+       - Auth
+      responses:
+        200:
+          description: ok
+          schema:
+            $ref: '#/definitions/Users'
         401:
           description: unauthorized
           schema:
