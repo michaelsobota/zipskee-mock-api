@@ -1122,9 +1122,6 @@ definitions:
     type: object
     required:
       - id
-      - userName
-      - firstName
-      - lastName
     properties:
       id:
         type: integer

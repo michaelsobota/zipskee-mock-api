@@ -29,12 +29,58 @@ paths:
          required: true
          type: string
       tags:
-       - Login
+       - Auth
       responses:
         200:
           description: ok
           schema:
             $ref: '#/definitions/Login'
+        401:
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        500:
+          description: internal server error
+          schema:
+            $ref: '#/definitions/Errors'
+  /logout:
+    post:
+      summary: Expire a session token for zipskee
+      parameters:
+       - name: X-ZIPSKEE-SESSION
+         in: header
+         description: A session token for access control
+         required: true
+         type: string
+      tags:
+       - Auth
+      responses:
+        200:
+          description: ok
+        401:
+          description: unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        500:
+          description: internal server error
+          schema:
+            $ref: '#/definitions/Errors'
+  /login/session-info:
+    post:
+      summary: Authenticate a session token for zipskee
+      parameters:
+       - name: X-ZIPSKEE-SESSION
+         in: header
+         description: A session token for access control
+         required: true
+         type: string
+      tags:
+       - Auth
+      responses:
+        200:
+          description: ok
+          schema:
+            $ref: '#/definitions/User'
         401:
           description: unauthorized
           schema:
@@ -1072,49 +1118,53 @@ definitions:
           type: boolean
         referralText:
           type: string
+  User:
+    type: object
+    required:
+      - id
+    properties:
+      id:
+        type: integer
+      userName:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+      gender:
+        type: string
+      hometown:
+        type: string
+      currentCity:
+        type: string
+      is_traveling:
+        type: boolean
+      dob:
+        type: integer
+        description: epoch time dob
+      occupation:
+        type: string
+      about_me:
+        type: string
+      role:
+        type: string
+      links:
+        type: object
+        required:
+         - rel
+         - href
+        properties:
+          rel:
+            type: string
+            enum:
+             - self
+          href:
+            type: string
+            description: e.g., "/api/v1/users/idOfUser"
   Users:
     type: array
     items:
-      type: object
-      required:
-       - id
-      properties:
-        id:
-          type: integer
-        firstName:
-          type: string
-        lastName:
-          type: string
-        gender:
-          type: string
-        hometown:
-          type: string
-        currentCity:
-          type: string
-        is_traveling:
-          type: boolean
-        dob:
-          type: integer
-          description: epoch time dob
-        occupation:
-          type: string
-        about_me:
-          type: string
-        role:
-          type: string
-        links:
-          type: object
-          required:
-           - rel
-           - href
-          properties:
-            rel:
-              type: string
-              enum:
-               - self
-            href:
-              type: string
-              description: e.g., "/api/v1/users/idOfUser"
+      $ref: '#/definitions/User'
   Photos:
     type: array
     items:
