@@ -3,7 +3,7 @@ var middleware = require('swagger-express-middleware');
  
 var app = express();
  
-middleware('zipskee-v1.swagger.yaml', app, function(err, middleware) {
+middleware('swagger-ui/dist/zipskee-v1.swagger.yaml', app, function(err, middleware) {
     // Add all the Swagger Express Middleware, or just the ones you need. 
     // NOTE: Some of these accept optional options (omitted here for brevity) 
     app.use(
