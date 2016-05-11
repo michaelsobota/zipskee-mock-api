@@ -2,6 +2,8 @@
 ## Getting Started
 First, clone this repo
 
+The swagger spec is located in `/swagger-ui/dist/`. Any updates to the spec should be done on a feature branch, then PR'd back to master.
+
 Then...
 `npm install`
 
