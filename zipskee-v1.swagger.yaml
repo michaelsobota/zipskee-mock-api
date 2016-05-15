@@ -331,6 +331,8 @@ paths:
       responses:
         201:
           description: created
+          schema:
+            $ref: '#/definitions/Success'
         400:
           description: bad request
           schema:
