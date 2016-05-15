@@ -89,6 +89,20 @@ paths:
           description: internal server error
           schema:
             $ref: '#/definitions/Errors'
+  /interests:
+    get:
+      summary: Returns a list of all available interests
+      tags:
+       - Interests
+      responses:
+        200:
+          description: ok
+          schema:
+            $ref: "#/definitions/Interests"
+        500:
+          description: internal server error
+          schema:
+            $ref: "#/definitions/Errors"
   /users:
     get:
       summary: Retruns a full list of users
@@ -258,6 +272,107 @@ paths:
           description: bad request
           schema:
             $ref: '#/definitions/Success'
+  /users/{userId}/interests:
+    get:
+      summary: Returns a list of all interests for a user
+      parameters:
+       - name: userId
+         in: path
+         description: the id of the logged-in user
+         required: true
+         type: integer
+       - name: X-ZIPSKEE-SESSION
+         in: header
+         description: A session token for access control
+         required: true
+         type: string
+      tags:
+       - Users
+       - Interests
+      responses:
+        200:
+          description: ok
+          schema:
+            type: array
+            items:
+              type: integer
+        500:
+          description: internal server error
+          schema:
+            $ref: "#/definitions/Errors"
+        401:
+          description: unauthorized
+          schema:
+            $ref: "#/definitions/Errors"
+    post:
+      summary: Associates a new list of interests with a user
+      parameters:
+       - name: userId
+         in: path
+         description: the id of the logged-in user
+         required: true
+         type: integer
+       - name: X-ZIPSKEE-SESSION
+         in: header
+         description: A session token for access control
+         required: true
+         type: string
+       - name: interestIds
+         in: body
+         description: a list of interest ID's to be removed from the User
+         required: true
+         schema:
+           type: array
+           items:
+            type: integer
+      tags:
+       - Users
+       - Interests
+      responses:
+        201:
+          description: created
+        400:
+          description: bad request
+          schema:
+            $ref: '#/definitions/Errors'
+    delete:
+      summary: Deletes an existing list of interests from a user
+      parameters:
+       - name: userId
+         in: path
+         description: the id of the logged-in user
+         required: true
+         type: integer
+       - name: X-ZIPSKEE-SESSION
+         in: header
+         description: A session token for access control
+         required: true
+         type: string
+       - name: interestIds
+         in: body
+         description: a list of interest ID's to be removed from the User
+         required: true
+         schema:
+           type: array
+           items:
+            type: integer
+      tags:
+       - Users
+       - Interests
+      responses:
+        200:
+          description: ok
+          schema:
+            $ref: '#/definitions/Success'
+        500:
+          description: internal server error
+          schema:
+            $ref: "#/definitions/Errors"
+        401:
+          description: unauthorized
+          schema:
+            $ref: "#/definitions/Errors"
+
   /users/{userId}/photos:
     get:
       summary: Returns a list of all photos for a user
@@ -1194,6 +1309,21 @@ definitions:
             href:
               type: string
               description: e.g., "/api/v1/users/idOfUser"
+  Interests:
+    type: array
+    items:
+      type: object
+      required:
+       - id
+       - type
+       - imageUri
+      properties:
+        id:
+          type: integer
+        type:
+          type: string
+        imageUri:
+          type: string
   Success:
     type: object
     required:
