@@ -293,9 +293,7 @@ paths:
         200:
           description: ok
           schema:
-            type: array
-            items:
-              type: integer
+            $ref: '#/definitions/Interests'
         500:
           description: internal server error
           schema:
