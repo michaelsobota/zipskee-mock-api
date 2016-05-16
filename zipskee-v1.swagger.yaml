@@ -103,6 +103,20 @@ paths:
           description: internal server error
           schema:
             $ref: "#/definitions/Errors"
+  /languages:
+    get:
+      summary: Returns a list of all available languages
+      tags:
+       - Languages
+      responses:
+        200:
+          description: ok
+          schema:
+            $ref: "#/definitions/Languages"
+        500:
+          description: internal server error
+          schema:
+            $ref: "#/definitions/Errors"
   /users:
     get:
       summary: Retruns a full list of users
@@ -1323,6 +1337,18 @@ definitions:
         type:
           type: string
         imageUri:
+          type: string
+  Languages:
+    type: array
+    items:
+      type: object
+      required:
+       - id
+       - type
+      properties:
+        id:
+          type: integer
+        type:
           type: string
   Success:
     type: object
