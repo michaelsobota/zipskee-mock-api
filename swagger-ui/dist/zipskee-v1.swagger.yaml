@@ -386,7 +386,106 @@ paths:
           description: unauthorized
           schema:
             $ref: "#/definitions/Errors"
-
+  /users/{userId}/languages:
+    get:
+      summary: Returns a list of all languages for a user
+      parameters:
+       - name: userId
+         in: path
+         description: the id of the logged-in user
+         required: true
+         type: integer
+       - name: X-ZIPSKEE-SESSION
+         in: header
+         description: A session token for access control
+         required: true
+         type: string
+      tags:
+       - Users
+       - Languages
+      responses:
+        200:
+          description: ok
+          schema:
+            $ref: '#/definitions/Languages'
+        500:
+          description: internal server error
+          schema:
+            $ref: "#/definitions/Errors"
+        401:
+          description: unauthorized
+          schema:
+            $ref: "#/definitions/Errors"
+    post:
+      summary: Associates a new list of languages with a user
+      parameters:
+       - name: userId
+         in: path
+         description: the id of the logged-in user
+         required: true
+         type: integer
+       - name: X-ZIPSKEE-SESSION
+         in: header
+         description: A session token for access control
+         required: true
+         type: string
+       - name: languageIds
+         in: body
+         description: a list of language ID's to be removed from the User
+         required: true
+         schema:
+           type: array
+           items:
+            type: integer
+      tags:
+       - Users
+       - Languages
+      responses:
+        201:
+          description: created
+          schema:
+            $ref: '#/definitions/Success'
+        400:
+          description: bad request
+          schema:
+            $ref: '#/definitions/Errors'
+    delete:
+      summary: Deletes an existing list of languages from a user
+      parameters:
+       - name: userId
+         in: path
+         description: the id of the logged-in user
+         required: true
+         type: integer
+       - name: X-ZIPSKEE-SESSION
+         in: header
+         description: A session token for access control
+         required: true
+         type: string
+       - name: languageIds
+         in: body
+         description: a list of language ID's to be removed from the User
+         required: true
+         schema:
+           type: array
+           items:
+            type: integer
+      tags:
+       - Users
+       - Languages
+      responses:
+        200:
+          description: ok
+          schema:
+            $ref: '#/definitions/Success'
+        500:
+          description: internal server error
+          schema:
+            $ref: "#/definitions/Errors"
+        401:
+          description: unauthorized
+          schema:
+            $ref: "#/definitions/Errors"
   /users/{userId}/photos:
     get:
       summary: Returns a list of all photos for a user
