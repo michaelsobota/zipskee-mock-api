@@ -57,10 +57,6 @@ paths:
       responses:
         204:
           description: No Content
-        401:
-          description: unauthorized
-          schema:
-            $ref: '#/definitions/Errors'
         500:
           description: internal server error
           schema:
