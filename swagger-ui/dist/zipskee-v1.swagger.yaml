@@ -272,8 +272,8 @@ paths:
       tags:
        - Users
       responses:
-        200:
-          description: ok
+        204:
+          description: No Content
           schema:
             $ref: '#/definitions/Success'
         401:
