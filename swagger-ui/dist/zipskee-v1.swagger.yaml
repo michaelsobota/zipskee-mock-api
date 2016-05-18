@@ -31,8 +31,8 @@ paths:
       tags:
        - Auth
       responses:
-        200:
-          description: ok
+        201:
+          description: session created
           schema:
             $ref: '#/definitions/Login'
         401:
