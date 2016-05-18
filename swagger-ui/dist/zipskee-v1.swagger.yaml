@@ -1,4 +1,4 @@
-# Zipskee API 1.0
+ƒ# Zipskee API 1.0
 swagger: '2.0'
 info:
   title: Zipskee API v1.0
@@ -135,6 +135,8 @@ paths:
              email:
                type: string
              password:
+               type: string
+             passwordConfirmation:
                type: string
       tags:
        - Users
