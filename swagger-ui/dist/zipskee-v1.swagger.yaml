@@ -55,8 +55,8 @@ paths:
       tags:
        - Auth
       responses:
-        200:
-          description: ok
+        204:
+          description: No Content
         401:
           description: unauthorized
           schema:
