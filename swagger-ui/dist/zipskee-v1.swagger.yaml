@@ -164,6 +164,8 @@ paths:
                type: string
              password:
                type: string
+             passwordConfirmation:
+               type: string
       tags:
        - Users
       responses:
