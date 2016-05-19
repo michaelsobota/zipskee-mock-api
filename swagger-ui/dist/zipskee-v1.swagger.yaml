@@ -28,6 +28,11 @@ paths:
          description: password of person logging in
          required: true
          type: string
+       - name: rememberMe
+         in: formData
+         description: rememberMe - 0 for no, 1 for yes
+         required: false
+         type: integer
       tags:
        - Auth
       responses:
