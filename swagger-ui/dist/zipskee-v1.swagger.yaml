@@ -31,8 +31,8 @@ paths:
       tags:
        - Auth
       responses:
-        200:
-          description: ok
+        201:
+          description: session created
           schema:
             $ref: '#/definitions/Login'
         401:
@@ -55,12 +55,8 @@ paths:
       tags:
        - Auth
       responses:
-        200:
-          description: ok
-        401:
-          description: unauthorized
-          schema:
-            $ref: '#/definitions/Errors'
+        204:
+          description: No Content
         500:
           description: internal server error
           schema:
@@ -171,8 +167,8 @@ paths:
       responses:
         201:
           description: created
-        400:
-          description: bad request
+        422:
+          description: unprocessable entity
           schema:
             $ref: '#/definitions/Errors'
   /users/{userId}:
@@ -276,8 +272,8 @@ paths:
       tags:
        - Users
       responses:
-        200:
-          description: ok
+        204:
+          description: No Content
           schema:
             $ref: '#/definitions/Success'
         401:
