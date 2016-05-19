@@ -65,8 +65,8 @@ paths:
           description: internal server error
           schema:
             $ref: '#/definitions/Errors'
-  /login/session-info:
-    post:
+  /session-info:
+    get:
       summary: Authenticate a session token for zipskee
       parameters:
        - name: X-ZIPSKEE-SESSION
